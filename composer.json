@@ -1,0 +1,20 @@
+{
+    "name": "sandersao/file-transfer",
+    "description": "Simple http file transfer interface",
+    "license": "private",
+    "autoload": {
+        "psr-4": {
+            "Sandersao\\FileTransfer\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Sanderson Rocha",
+            "email": "sanduba753@gmail.com"
+        }
+    ],
+    "require": {
+        "phroute/phroute": "^2.2",
+        "php-di/php-di": "^7.0"
+    }
+}
