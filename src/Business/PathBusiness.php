@@ -5,6 +5,7 @@ namespace Sandersao\FileTransfer\Business;
 use PathResponse;
 use Sandersao\FileTransfer\Business\Adapter\PathAdapter;
 use Sandersao\FileTransfer\Config\EnvConfig;
+use Sandersao\FileTransfer\IO\Response\PathAction;
 use Sandersao\FileTransfer\IO\Response\PathResponse as ResponsePathResponse;
 
 class PathBusiness
@@ -39,12 +40,11 @@ class PathBusiness
 
             $pathResponse->subpath = $childPath;
 
-            $pathResponse->path = $fullPath;
-            $deveVoltarParaRaiz = $childPath == '..' && in_array($path, $this->envConfig->getPathList());
-            if ($deveVoltarParaRaiz) {
+            $pathResponse->path = realpath($fullPath);
+            $shouldReturnRoot = $childPath == '..' && in_array($path, $this->envConfig->getPathList());
+            if ($shouldReturnRoot) {
                 $pathResponse->path = '';
             }
-
 
             $pathResponse->isFile = null;
             if (is_file($fullPath)) {
@@ -52,6 +52,18 @@ class PathBusiness
             }
             if (is_dir($fullPath)) {
                 $pathResponse->isFile = false;
+            }
+
+            if($pathResponse->isFile === true){
+                $pathResponse->action = new PathAction();
+                $pathResponse->action->read = true;
+                $pathResponse->action->download = true;
+            }
+
+            if($pathResponse->isFile === false){
+                $pathResponse->action = new PathAction();
+                $pathResponse->action->read = true;
+                $pathResponse->action->download = true;
             }
 
             return $pathResponse;

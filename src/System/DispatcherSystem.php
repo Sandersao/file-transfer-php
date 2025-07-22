@@ -8,6 +8,12 @@ use Phroute\Phroute\RouteCollector;
 
 class DispatcherSystem
 {
+    private ViewSystem $view;
+    public function __construct(ViewSystem $view)
+    {
+        $this->view = $view;
+    }
+
     public function dispatch(RouteCollector $routeCollection){
         $phrouteDispatcher = new PhrouteDispatcher($routeCollection->getData());
         try {
@@ -20,7 +26,9 @@ class DispatcherSystem
                 header('Content-Type: application/json');
                 echo json_encode($response);
             } else {
+                $this->view->import('base.head');
                 echo $response;
+                $this->view->import('base.footer');
             }
         } catch (Exception $e) {
             http_response_code(404);
