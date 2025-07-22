@@ -3,16 +3,16 @@
 namespace Sandersao\FileTransfer\Config;
 
 use Phroute\Phroute\RouteCollector;
-use Sandersao\FileTransfer\Controller\FileController;
+use Sandersao\FileTransfer\Controller\PathController;
 
 class RouterConfig {
-    private FileController $file;
-    public function __construct(FileController $file) {
-        $this->file = $file;
+    private PathController $path;
+    public function __construct(PathController $path) {
+        $this->path = $path;
     }
 
     public function route(RouteCollector $collection) {
-        $this->file($collection);
+        $this->path($collection);
         $collection->get('/hello-world', function () {
             return [
                 'message' => 'Hello world',
@@ -21,9 +21,9 @@ class RouterConfig {
         });
     }
 
-    public function file(RouteCollector $collection){
-        $collection->get('/file', function () {
-            return $this->file->list();
+    public function path(RouteCollector $collection){
+        $collection->get('/path', function () {
+            return $this->path->listView($_GET['path'] ?? null);
         });
     }
 }

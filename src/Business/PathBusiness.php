@@ -1,0 +1,60 @@
+<?php
+
+namespace Sandersao\FileTransfer\Business;
+
+use PathResponse;
+use Sandersao\FileTransfer\Business\Adapter\PathAdapter;
+use Sandersao\FileTransfer\Config\EnvConfig;
+use Sandersao\FileTransfer\IO\Response\PathResponse as ResponsePathResponse;
+
+class PathBusiness
+{
+    private PathAdapter $adapter;
+    private EnvConfig $envConfig;
+    public function __construct(
+        PathAdapter $adapter,
+        EnvConfig $envConfig
+    ) {
+        $this->adapter = $adapter;
+        $this->envConfig = $envConfig;
+    }
+
+    /** @return array<int, PathResponse> */
+    public function list(string | null $path): array
+    {
+        if (!$path) {
+            return array_map(function ($childPath) {
+                $pathResponse = new ResponsePathResponse();
+                $pathResponse->path = $childPath;
+                $pathResponse->subpath = $childPath;
+                $pathResponse->isFile = false;
+                return $pathResponse;
+            }, $this->envConfig->getPathList());
+        }
+
+        return array_map(function ($childPath) use ($path) {
+            $fullPath = $path . DIRECTORY_SEPARATOR . $childPath;
+
+            $pathResponse = new ResponsePathResponse();
+
+            $pathResponse->subpath = $childPath;
+
+            $pathResponse->path = $fullPath;
+            $deveVoltarParaRaiz = $childPath == '..' && in_array($path, $this->envConfig->getPathList());
+            if ($deveVoltarParaRaiz) {
+                $pathResponse->path = '';
+            }
+
+
+            $pathResponse->isFile = null;
+            if (is_file($fullPath)) {
+                $pathResponse->isFile = true;
+            }
+            if (is_dir($fullPath)) {
+                $pathResponse->isFile = false;
+            }
+
+            return $pathResponse;
+        }, $this->adapter->list($path));
+    }
+}
