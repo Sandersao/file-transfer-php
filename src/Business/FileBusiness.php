@@ -17,18 +17,15 @@ class FileBusiness
     public function list(string $path) {
         $pathList = $this->pathBusiness->list($path);
         $filePathList = array_filter($pathList, function ($path) {
-            return $path->isFile === true;
+            return $path->isFile === false;
         });
         return array_map(function ($path) {
             $file = new FileResponse($path);
             $file->path = $path->path;
             $file->subpath = $path->subpath;
+            $file->name = $path->name;
 
-            $name = explode(DIRECTORY_SEPARATOR, $path->path);
-            $name = end($name);
-            $file->name = $name;
-
-            $ext = explode("\.", $name);
+            $ext = explode("\.", $path->name);
             $ext = end($ext);
             $file->ext = $ext;
 

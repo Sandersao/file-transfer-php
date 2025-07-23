@@ -45,24 +45,16 @@ class PathBusiness
                 $pathResponse->path = '';
             }
 
+            $name = explode(DIRECTORY_SEPARATOR, $pathResponse->path);
+            $name = end($name);
+            $pathResponse->name = $name;
+
             $pathResponse->isFile = null;
             if (is_file($fullPath)) {
                 $pathResponse->isFile = true;
             }
             if (is_dir($fullPath)) {
                 $pathResponse->isFile = false;
-            }
-
-            if($pathResponse->isFile === true){
-                $pathResponse->action = new PathAction();
-                $pathResponse->action->read = true;
-                $pathResponse->action->download = true;
-            }
-
-            if($pathResponse->isFile === false){
-                $pathResponse->action = new PathAction();
-                $pathResponse->action->read = true;
-                $pathResponse->action->download = true;
             }
 
             return $pathResponse;

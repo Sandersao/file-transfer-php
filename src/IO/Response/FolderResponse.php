@@ -2,10 +2,10 @@
 
 namespace Sandersao\FileTransfer\IO\Response;
 
-class PathResponse
+class FolderResponse
 {
     public string $path;
     public string $subpath;
     public string $name;
-    public bool | null $isFile;
+    public int $fileCount;
 }
