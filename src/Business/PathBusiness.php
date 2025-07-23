@@ -2,11 +2,10 @@
 
 namespace Sandersao\FileTransfer\Business;
 
-use PathResponse;
 use Sandersao\FileTransfer\Business\Adapter\PathAdapter;
 use Sandersao\FileTransfer\Config\EnvConfig;
 use Sandersao\FileTransfer\IO\Response\PathAction;
-use Sandersao\FileTransfer\IO\Response\PathResponse as ResponsePathResponse;
+use Sandersao\FileTransfer\IO\Response\PathResponse;
 
 class PathBusiness
 {
@@ -25,7 +24,7 @@ class PathBusiness
     {
         if (!$path) {
             return array_map(function ($childPath) {
-                $pathResponse = new ResponsePathResponse();
+                $pathResponse = new PathResponse();
                 $pathResponse->path = $childPath;
                 $pathResponse->subpath = $childPath;
                 $pathResponse->isFile = false;
@@ -36,7 +35,7 @@ class PathBusiness
         return array_map(function ($childPath) use ($path) {
             $fullPath = $path . DIRECTORY_SEPARATOR . $childPath;
 
-            $pathResponse = new ResponsePathResponse();
+            $pathResponse = new PathResponse();
 
             $pathResponse->subpath = $childPath;
 

@@ -1,8 +1,14 @@
 <div class="container-fluid">
     <div class="row">
         <?php foreach ($pathList as $path) : ?>
-                <div class="card col-3">
+            <div class="col-3 overflow-auto">
+                <div class="card">
                     <div class="card-body">
+                        <?php if ($path->isFile) : ?>
+                            <div class="card-img-top btn" name="preview" path="<?= $path->path ?>">
+                                <img src="..." alt="Preview">
+                            </div>
+                        <?php endif; ?>
                         <h5 class="card-title"><?= $path->path ? $path->subpath : 'Início' ?></h5>
                         <p class="card-text"><?= $path->path ? $path->path : 'Voltar ao início' ?></p>
                         <?php if ($path->subpath == '..') : ?>
@@ -12,15 +18,12 @@
                             <div class="btn btn-primary" name="access" path="<?= $path->path ?>">Acessar</div>
                         <?php endif; ?>
 
-                        <?php if ($path->isFile) : ?>
-                            <div class="btn btn-warning" name="preview" path="<?= $path->path ?>">Visualizar</div>
-                        <?php endif; ?>
-                        
                         <?php if ($path->path && $path->subpath != '..') : ?>
                             <span class="btn btn-success" name="download" path="<?= $path->path ?>">Download</span>
                         <?php endif; ?>
                     </div>
                 </div>
+            </div>
         <?php endforeach; ?>
     </div>
 </div>

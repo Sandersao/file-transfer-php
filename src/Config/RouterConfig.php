@@ -13,6 +13,11 @@ class RouterConfig {
 
     public function route(RouteCollector $collection) {
         $this->path($collection);
+        $collection->get('', function() {
+            $link = '/path';
+            echo "<script>window.location.href = '$link';</script>";
+            die();
+        });
         $collection->get('/hello-world', function () {
             return [
                 'message' => 'Hello world',
