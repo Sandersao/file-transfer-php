@@ -1,3 +1,4 @@
+<?php use Sandersao\FileTransfer\IO\Response\FilePreviewType; ?>
 <div class="container-fluid">
     <div class="row">
         <div class="col">
@@ -10,7 +11,7 @@
         </div>
     </div>
     <div class="row">
-        <?php if(count($folderList) == 0) : ?>
+        <?php if (count($folderList) == 0) : ?>
             <div class="col-3 overflow-auto">
                 <div class="card">
                     <div class="card-body">
@@ -32,15 +33,15 @@
                         </p>
 
                         <?php if ($folder->subpath == '..') : ?>
-                            <div class="btn btn-info" name="access" path="<?= $folder->path ?>">Voltar</div>
+                            <div class="btn btn-info" name="access" path="<?= $folder->encodedPath ?>">Voltar</div>
                         <?php endif; ?>
 
                         <?php if ($folder->subpath != '..') : ?>
-                            <div class="btn btn-primary" name="access" path="<?= $folder->path ?>">Acessar</div>
+                            <div class="btn btn-primary" name="access" path="<?= $folder->encodedPath ?>">Acessar</div>
                         <?php endif; ?>
 
-                        <?php if ($folder->path && $folder->subpath != '..') : ?>
-                            <span class="btn btn-success" name="download" path="<?= $folder->path ?>">Download</span>
+                        <?php if ($folder->encodedPath && $folder->subpath != '..') : ?>
+                            <span class="btn btn-success" name="download" path="<?= $folder->encodedPath ?>">Download</span>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -54,7 +55,7 @@
         </div>
     </div>
     <div class="row">
-        <?php if(count($fileList) == 0) : ?>
+        <?php if (count($fileList) == 0) : ?>
             <div class="col-3 overflow-auto">
                 <div class="card">
                     <div class="card-body">
@@ -67,9 +68,20 @@
             <div class="col-sm-12 col-md-6 col-lg-3 mb-3 overflow-auto">
                 <div class="card">
                     <div class="card-body">
-                        <?php if ($file->isPreviewable) : ?>
-                            <div class="card-img-top btn" name="preview" path="<?= $file->path ?>">
-                                <img class="d-block w-100" src="..." alt="Preview">
+                        <?php if ($file->previewType != FilePreviewType::$none) : ?>
+                            <div class="card-img-top btn" name="preview" path="<?= $file->encodedPath ?>">
+                                <?php if ($file->previewType == FilePreviewType::$image) : ?>
+                                    <img class="d-block w-100" src="/file/preview?path=<?= $file->encodedPath ?>" alt="Preview" disabled>
+                                <?php endif; ?>
+                                <?php if ($file->previewType == FilePreviewType::$video) : ?>
+                                    <video class="w-100" disabled>
+                                        <source src="/file/preview?path=<?= $file->encodedPath ?>">
+                                        <track label="English" kind="subtitles" srclang="en" src="" default />
+                                    </video>
+                                <?php endif; ?>
+                                <?php if ($file->previewType == FilePreviewType::$iframe) : ?>
+                                    <iframe class="w-100 overflow-hidden" src="/file/preview?path=<?= $file->encodedPath ?>" title="<?=$file->name?>" disabled></iframe>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
                         <h5 class="card-title"><?= $file->path ? $file->subpath : 'Início' ?></h5>
@@ -79,12 +91,8 @@
                         <p class="card-text">
                             Tamanho: <?= $file->size ?>
                         </p>
-                        <?php if ($file->subpath == '..') : ?>
-                            <div class="btn btn-info" name="access" path="<?= $file->path ?>">Voltar</div>
-                        <?php endif; ?>
-
-                        <?php if ($file->path && $file->subpath != '..') : ?>
-                            <span class="btn btn-success" name="download" path="<?= $file->path ?>">Download</span>
+                        <?php if ($file->encodedPath && $file->subpath != '..') : ?>
+                            <span class="btn btn-success" name="download" path="<?= $file->encodedPath ?>">Download</span>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -99,4 +107,10 @@
         window.location.href = `/navigate?path=${path}`
     }
     document.querySelectorAll('[name="access"]').forEach(e => e.addEventListener('click', (e) => navegar(e.target)))
+
+    previsualizar = (target) => {
+        let path = target.getAttribute('path')
+        window.open(`/file/preview?path=${path}`, '_blank').focus();
+    }
+    document.querySelectorAll('[name="preview"]').forEach(e => e.addEventListener('click', (e) => previsualizar(e.target)))
 </script>

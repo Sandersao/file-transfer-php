@@ -35,6 +35,7 @@ class FolderBusiness
 
         $folder = new FolderResponse();
         $folder->path = $path->path;
+        $folder->encodedPath = urlencode($path->path);
         $folder->subpath = $path->subpath;
         $folder->name = $path->name;
 

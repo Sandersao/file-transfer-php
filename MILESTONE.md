@@ -1,2 +1,4 @@
 - [ ] Segregate the folder and goto parant folder structures
 - [ ] Create folder count for folder response
+- [X] Get single file\folder
+- [X] File Preview
