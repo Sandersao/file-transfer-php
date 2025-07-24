@@ -6,6 +6,7 @@ use Sandersao\FileTransfer\IO\Response\FileResponse;
 
 class FileBusiness
 {
+    private array $previewableExtList = ['png', 'pdf', 'mp4', 'jpg'];
     private PathBusiness $pathBusiness;
     public function __construct(
         PathBusiness $pathBusiness
@@ -14,10 +15,10 @@ class FileBusiness
     }
 
     /** @return array<int, FileResponse> */
-    public function list(string $path) {
+    public function list(string | null $path) {
         $pathList = $this->pathBusiness->list($path);
         $filePathList = array_filter($pathList, function ($path) {
-            return $path->isFile === false;
+            return $path->isFile === true;
         });
         return array_map(function ($path) {
             $file = new FileResponse($path);
@@ -25,11 +26,11 @@ class FileBusiness
             $file->subpath = $path->subpath;
             $file->name = $path->name;
 
-            $ext = explode("\.", $path->name);
+            $ext = explode(".", $path->name);
             $ext = end($ext);
             $file->ext = $ext;
 
-            if(in_array($ext, ['png', 'pdf'])){
+            if(in_array($ext, $this->previewableExtList)){
                 $file->isPreviewable = true;
             }
 

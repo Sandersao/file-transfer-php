@@ -14,10 +14,10 @@ class FolderBusiness
     }
 
     /** @return array<int, FolderResponse> */
-    public function list(string $path) {
+    public function list(string | null $path) {
         $pathList = $this->pathBusiness->list($path);
         $filePathList = array_filter($pathList, function ($path) {
-            return $path->isFile === true;
+            return $path->isFile === false;
         });
         return array_map(function ($path) {
             $folder = new FolderResponse();

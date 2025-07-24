@@ -24,40 +24,44 @@ class PathBusiness
     {
         if (!$path) {
             return array_map(function ($childPath) {
-                $pathResponse = new PathResponse();
-                $pathResponse->path = $childPath;
-                $pathResponse->subpath = $childPath;
-                $pathResponse->isFile = false;
-                return $pathResponse;
+                $path = new PathResponse();
+                $path->path = $childPath;
+                $path->subpath = $childPath;
+                $path->isFile = false;
+
+                $name = explode(DIRECTORY_SEPARATOR, $path->path);
+                $name = end($name);
+                $path->name = $name;
+                return $path;
             }, $this->envConfig->getPathList());
         }
 
         return array_map(function ($childPath) use ($path) {
             $fullPath = $path . DIRECTORY_SEPARATOR . $childPath;
 
-            $pathResponse = new PathResponse();
+            $path = new PathResponse();
 
-            $pathResponse->subpath = $childPath;
+            $path->subpath = $childPath;
 
-            $pathResponse->path = realpath($fullPath);
+            $path->path = realpath($fullPath);
             $shouldReturnRoot = $childPath == '..' && in_array($path, $this->envConfig->getPathList());
             if ($shouldReturnRoot) {
-                $pathResponse->path = '';
+                $path->path = '';
             }
 
-            $name = explode(DIRECTORY_SEPARATOR, $pathResponse->path);
+            $name = explode(DIRECTORY_SEPARATOR, $path->path);
             $name = end($name);
-            $pathResponse->name = $name;
+            $path->name = $name;
 
-            $pathResponse->isFile = null;
+            $path->isFile = null;
             if (is_file($fullPath)) {
-                $pathResponse->isFile = true;
+                $path->isFile = true;
             }
             if (is_dir($fullPath)) {
-                $pathResponse->isFile = false;
+                $path->isFile = false;
             }
 
-            return $pathResponse;
+            return $path;
         }, $this->adapter->list($path));
     }
 }
