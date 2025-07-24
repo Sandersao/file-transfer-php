@@ -5,3 +5,5 @@
 - [ ] Download for files
 - [ ] Download for folders
 - [ ] Single downloadr interface that determines if folder or file downloader must be called with only the file path
+- [X] Provide the data to another computers onthe LAN
+- [ ] Modify the buttons to the 

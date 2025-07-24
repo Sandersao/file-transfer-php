@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "80:80"  # Porta externa:interna
+    volumes:
+      - .:/var/www/html:ro
+      - /c/:/mnt/c:ro
+      - /d/:/mnt/d:ro
+      - /e/:/mnt/e:ro
+    networks:
+      - lan
+
+networks:
+  lan:
+    driver: bridge

@@ -4,6 +4,7 @@ namespace Sandersao\FileTransfer\Business;
 
 use Sandersao\FileTransfer\Business\Adapter\PathAdapter;
 use Sandersao\FileTransfer\Config\EnvConfig;
+use Sandersao\FileTransfer\IO\Exception\InternalException;
 use Sandersao\FileTransfer\IO\Response\PathAction;
 use Sandersao\FileTransfer\IO\Response\PathResponse;
 
@@ -24,6 +25,9 @@ class PathBusiness
     {
         if (!$path) {
             return array_map(function ($childPath) {
+                if(!is_dir($childPath)){
+                    throw new InternalException("Não foi possível acessar o diretório $childPath");
+                }
                 return $this->get($childPath);
             }, $this->envConfig->getPathList());
         }

@@ -7,7 +7,7 @@ use Sandersao\FileTransfer\System\BootstrapSystem;
 
 $container = new Container();
 
-/** @var BootstrapSystem */
+/** @var BootstrapSystem $bootstrap */
 $bootstrap = $container->get(BootstrapSystem::class);
 
 $bootstrap->start();

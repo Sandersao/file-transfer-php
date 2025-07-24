@@ -12,7 +12,7 @@
     </div>
     <div class="row">
         <?php if (count($folderList) == 0) : ?>
-            <div class="col-3 overflow-auto">
+            <div class="col-12 mb-3 overflow-auto">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Sem pastas aqui</h5>
@@ -21,13 +21,13 @@
             </div>
         <?php endif; ?>
         <?php foreach ($folderList as $folder) : ?>
-            <div class="col-sm-12 col-md-6 col-lg-3 mb-3 overflow-auto">
+            <div class="col-12 col-md-6 col-lg-3 mb-3 overflow-auto">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title"><?= $folder->path ? $folder->subpath : 'Início' ?></h5>
                         <p class="card-text">
                             Caminho: <?= $folder->path ? $folder->path : 'Voltar ao início' ?>
                         </p>
+
                         <p class="card-text">
                             Arquivos: <?= $folder->fileCount ?>
                         </p>
@@ -56,7 +56,7 @@
     </div>
     <div class="row">
         <?php if (count($fileList) == 0) : ?>
-            <div class="col-3 overflow-auto">
+            <div class="col-12 mb-3 mb-3 overflow-auto">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Sem arquivos aqui</h5>
@@ -65,7 +65,7 @@
             </div>
         <?php endif; ?>
         <?php foreach ($fileList as $file) : ?>
-            <div class="col-sm-12 col-md-6 col-lg-3 mb-3 overflow-auto">
+            <div class="col-12 col-md-6 col-lg-3 mb-3 mb-3 overflow-auto">
                 <div class="card">
                     <div class="card-body">
                         <?php if ($file->previewType != FilePreviewType::$none) : ?>
@@ -84,10 +84,11 @@
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>
-                        <h5 class="card-title"><?= $file->path ? $file->subpath : 'Início' ?></h5>
+
                         <p class="card-text">
                             Caminho: <?= $file->path ? $file->path : 'Voltar ao início' ?>
                         </p>
+
                         <p class="card-text">
                             Tamanho: <?= $file->size ?>
                         </p>
