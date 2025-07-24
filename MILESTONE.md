@@ -1,4 +1,7 @@
 - [ ] Segregate the folder and goto parant folder structures
-- [ ] Create folder count for folder response
+- [X] Create folder count for folder response
 - [X] Get single file\folder
 - [X] File Preview
+- [ ] Download for files
+- [ ] Download for folders
+- [ ] Single downloadr interface that determines if folder or file downloader must be called with only the file path
