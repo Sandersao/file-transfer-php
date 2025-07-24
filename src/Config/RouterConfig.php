@@ -4,21 +4,16 @@ namespace Sandersao\FileTransfer\Config;
 
 use Phroute\Phroute\RouteCollector;
 use Sandersao\FileTransfer\Controller\NavController;
-use Sandersao\FileTransfer\Controller\PathController;
 
 class RouterConfig {
     private NavController $nav;
-    private PathController $path;
     public function __construct(
-        NavController $nav,
-        PathController $path
+        NavController $nav
     ) {
         $this->nav = $nav;
-        $this->path = $path;
     }
 
     public function route(RouteCollector $collection) {
-        $this->path($collection);
         $this->nav($collection);
         $collection->get('', function() {
             $link = '/navigate';
@@ -30,12 +25,6 @@ class RouterConfig {
                 'message' => 'Hello world',
                 'ip' => $_SERVER['SERVER_ADDR'] ?? 'Impossível pegar o endereço'
             ];
-        });
-    }
-
-    public function path(RouteCollector $collection){
-        $collection->get('/path', function () {
-            return $this->path->listView($_GET['path'] ?? null);
         });
     }
 

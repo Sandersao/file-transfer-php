@@ -17,19 +17,12 @@ class DispatcherSystem
     public function dispatch(RouteCollector $routeCollection){
         $phrouteDispatcher = new PhrouteDispatcher($routeCollection->getData());
         try {
-            $response = $phrouteDispatcher->dispatch(
+            $responseSystem = $phrouteDispatcher->dispatch(
                 $_SERVER['REQUEST_METHOD'],
                 parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
             );
 
-            if (is_array($response)) {
-                header('Content-Type: application/json');
-                echo json_encode($response);
-            } else {
-                $this->view->import('base.head');
-                echo $response;
-                $this->view->import('base.footer');
-            }
+            $responseSystem->provide();
         } catch (Exception $e) {
             http_response_code(404);
             echo 'Página não encontrada.';

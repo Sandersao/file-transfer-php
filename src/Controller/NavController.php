@@ -3,6 +3,7 @@
 namespace Sandersao\FileTransfer\Controller;
 
 use Sandersao\FileTransfer\Business\NavBusiness;
+use Sandersao\FileTransfer\System\ResponseSystem;
 use Sandersao\FileTransfer\System\ViewSystem;
 
 class NavController
@@ -17,13 +18,17 @@ class NavController
         $this->view = $view;
     }
 
-    public function navigate(string | null $path)
+    public function navigate(string | null $path): ResponseSystem
     {
         $navigation = $this->business->list($path);
-        return $this->view->import('nav.navigate', [
+        $body = $this->view->import('nav.navigate', [
             'path' => $path,
             'fileList' => $navigation->fileList,
             'folderList' => $navigation->folderList
         ]);
+
+        $response = new ResponseSystem();
+        $response->body = $body;
+        return $response;
     }
 }
