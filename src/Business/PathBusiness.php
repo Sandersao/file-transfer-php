@@ -24,44 +24,47 @@ class PathBusiness
     {
         if (!$path) {
             return array_map(function ($childPath) {
-                $path = new PathResponse();
-                $path->path = $childPath;
-                $path->subpath = $childPath;
-                $path->isFile = false;
-
-                $name = explode(DIRECTORY_SEPARATOR, $path->path);
-                $name = end($name);
-                $path->name = $name;
-                return $path;
+                return $this->get($childPath);
             }, $this->envConfig->getPathList());
         }
 
         return array_map(function ($childPath) use ($path) {
-            $fullPath = $path . DIRECTORY_SEPARATOR . $childPath;
-
-            $path = new PathResponse();
-
-            $path->subpath = $childPath;
-
-            $path->path = realpath($fullPath);
-            $shouldReturnRoot = $childPath == '..' && in_array($path, $this->envConfig->getPathList());
-            if ($shouldReturnRoot) {
-                $path->path = '';
-            }
-
-            $name = explode(DIRECTORY_SEPARATOR, $path->path);
-            $name = end($name);
-            $path->name = $name;
-
-            $path->isFile = null;
-            if (is_file($fullPath)) {
-                $path->isFile = true;
-            }
-            if (is_dir($fullPath)) {
-                $path->isFile = false;
-            }
-
-            return $path;
+            return $this->get($path, $childPath);
         }, $this->adapter->list($path));
+    }
+
+    public function get(string $pathString, string | null $childPath = null): PathResponse
+    {
+        $path = new PathResponse();
+
+        if ($childPath) {
+            $fullPath = $pathString . DIRECTORY_SEPARATOR . $childPath;
+            $path->subpath = $childPath;
+        }
+
+        if (!$childPath){
+            $fullPath = $pathString;
+            $path->subpath = $pathString;
+        }
+
+        $path->path = realpath($fullPath);
+        $shouldReturnRoot = $childPath == '..' && in_array($pathString, $this->envConfig->getPathList());
+        if ($shouldReturnRoot) {
+            $path->path = '';
+        }
+
+        $name = explode(DIRECTORY_SEPARATOR, $path->path);
+        $name = end($name);
+        $path->name = $name;
+
+        $path->isFile = null;
+        if (is_file($fullPath)) {
+            $path->isFile = true;
+        }
+        if (is_dir($fullPath)) {
+            $path->isFile = false;
+        }
+
+        return $path;
     }
 }
