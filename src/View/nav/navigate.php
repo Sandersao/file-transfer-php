@@ -5,11 +5,13 @@
             <h2>Navegação</h2>
         </div>
     </div>
+    <?php if($previousDirEncoded !== null) : ?>
     <div class="row">
         <div class="col">
             <div class="btn btn-outline-secondary" name="access" path="<?= $previousDirEncoded ?>">Voltar</div>
         </div>
     </div>
+    <?php endif; ?>
     <div class="row">
         <div class="col">
             <h3>Pastas</h3>
@@ -110,13 +112,15 @@
 <script>
     navegar = (target) => {
         const path = target.getAttribute('path')
-        window.location.href = `/navigate?path=${path}`
+        const uri = path ? `/navigate?path=${path}`: '/navigate'
+        window.location.href = uri
     }
     document.querySelectorAll('[name="access"]').forEach(e => e.addEventListener('click', (e) => navegar(e.target)))
 
     previsualizar = (target) => {
         let path = target.getAttribute('path')
-        window.open(`/file/preview?path=${path}`, '_blank').focus();
+        const uri = `/file/preview?path=${path}`
+        window.open(uri, '_blank').focus();
     }
     document.querySelectorAll('[name="preview"]').forEach(e => e.addEventListener('click', (e) => previsualizar(e.target)))
 </script>

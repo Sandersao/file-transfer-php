@@ -25,10 +25,10 @@ class NavBusiness
         $navResponse->fileList = $this->fileBusiness->list($path);
         $navResponse->folderList = $this->folderBusiness->list($path);
 
-        $navResponse->previousDir = null;
         if (!empty($path)) {
-            $navResponse->previousDir = $this->pathBusiness->getPreviousDir($path);
-            $navResponse->previousDirEncoded = urlencode($navResponse->previousDir);
+            $previousDir = $this->pathBusiness->getPreviousDir($path);
+            $navResponse->previousDir = $previousDir;
+            $navResponse->previousDirEncoded = urlencode($previousDir) ?? '';
         }
         return $navResponse;
     }
