@@ -2,7 +2,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <h2>Navegação</h2>
+            <h2>Diretório: <?=$navigation->path?></h2>
         </div>
     </div>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -19,7 +19,6 @@
                     </div>
                 </li>
             <?php endforeach; ?>
-            <!-- <li class="breadcrumb-item active" aria-current="page">Library</li> -->
         </ol>
     </nav>
     <?php if($navigation->previousDirEncoded !== null) : ?>

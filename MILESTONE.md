@@ -4,6 +4,7 @@
 - [X] File Preview
 - [X] Provide the data to another computers onthe LAN
 - [X] Implementing of breadcrumb navigation system
+- [X] Solve the problems with the breadcrumbs
 - [ ] Download for files
 - [ ] Download for folders
 - [ ] Single downloadr interface that determines if folder or file downloader must be called with only the file path

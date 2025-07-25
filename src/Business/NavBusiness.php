@@ -53,9 +53,10 @@ class NavBusiness
         if (!empty($path)) {
             $pathList = $this->pathBusiness->getSubpath($path);
             $pathList = explode(DIRECTORY_SEPARATOR, $pathList);
-            $pathList = array_filter($pathList, function ($path) {
-                return !empty($path);
+            $pathList = array_filter($pathList, function ($pathItem) {
+                return !empty($pathItem);
             });
+            array_pop($pathList);
             $pathList = array_values($pathList);
         }
 

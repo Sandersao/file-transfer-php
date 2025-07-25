@@ -25,7 +25,6 @@ class NavController
         $folderList = $this->business->listFolder($path);
 
         $body = $this->view->import('nav.navigate', [
-            // 'path' => $path,
             'fileList' => $fileList,
             'folderList' => $folderList,
             'navigation' => $navigation,
