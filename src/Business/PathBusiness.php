@@ -56,6 +56,10 @@ class PathBusiness
         $name = end($name);
         $path->name = $name;
 
+        if(!is_file($path->path) && !is_dir($path->path)){
+            throw new InternalException("Impossível encontrar o arquivo $path->name");
+        }
+
         $path->isFile = null;
         if (is_file($fullPath)) {
             $path->isFile = true;

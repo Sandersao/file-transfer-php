@@ -63,9 +63,9 @@
                             <div class="btn btn-primary" name="access" path="<?= $folder->encodedPath ?>">Acessar</div>
                         <?php endif; ?>
 
-                        <?php if ($folder->encodedPath && $folder->subpath != '..') : ?>
+                        <!-- <?php if ($folder->encodedPath && $folder->subpath != '..') : ?>
                             <span class="btn btn-success" name="download" path="<?= $folder->encodedPath ?>">Download</span>
-                        <?php endif; ?>
+                        <?php endif; ?> -->
                     </div>
                 </div>
             </div>
@@ -116,7 +116,7 @@
                             Tamanho: <?= $file->size ?>
                         </p>
                         <?php if ($file->encodedPath && $file->subpath != '..') : ?>
-                            <span class="btn btn-success" name="download" path="<?= $file->encodedPath ?>">Download</span>
+                            <span class="btn btn-success" name="downloadFile" path="<?= $file->encodedPath ?>">Download</span>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -132,6 +132,13 @@
         window.location.href = uri
     }
     document.querySelectorAll('[name="access"]').forEach(e => e.addEventListener('click', (e) => navegar(e.target)))
+
+    downloadFile = (target) => {
+        const path = target.getAttribute('path')
+        const uri = `/file/download?path=${path}`
+        window.open(uri, '_blank').focus();
+    }
+    document.querySelectorAll('[name="downloadFile"]').forEach(e => e.addEventListener('click', (e) => downloadFile(e.target)))
 
     previsualizar = (target) => {
         let path = target.getAttribute('path')

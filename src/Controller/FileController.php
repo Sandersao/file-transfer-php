@@ -31,4 +31,26 @@ class FileController
         $response->body = $file->binaryes;
         return $response;
     }
+
+    public function download(string | null $path): ResponseSystem
+    {
+        $file = $this->business->get($path);
+
+        $file = $this->business->getBinaryData($file);
+        $file = $this->business->getMimetype($file);
+        
+        $response = new ResponseSystem();
+        $response->header = [
+            "Content-Description: File download",
+            "Content-Type: $file->mimetype",
+            "Content-Disposition: attachment; filename=\"$file->name\"",
+            'Content-Transfer-Encoding: binary',
+            'Expires: 0',
+            'Cache-Control: must-revalidate',
+            'Pragma: public',
+            "Content-Length: $file->byteSize",
+        ];
+        $response->body = $file->binaryes;
+        return $response;
+    }
 }

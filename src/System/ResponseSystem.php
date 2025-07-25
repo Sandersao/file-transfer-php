@@ -8,6 +8,8 @@ class ResponseSystem
     public array | string $body;
 
     public function provide(): void {
+        // ob_clean();
+        // flush();
         if ($this->header !== null && gettype($this->header) == 'string') {
             header($this->header);
             echo $this->body;

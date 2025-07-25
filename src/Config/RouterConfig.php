@@ -35,6 +35,8 @@ class RouterConfig {
         $collection->get('/file/preview', function () {
             return $this->file->preview($_GET['path'] ?? null);
         });
-        
+        $collection->get('/file/download', function () {
+            return $this->file->download($_GET['path'] ?? null);
+        });
     }
 }
