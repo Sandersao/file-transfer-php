@@ -20,12 +20,15 @@ class NavController
 
     public function navigate(string | null $path): ResponseSystem
     {
-        $navigation = $this->business->navigate($path);
+        $navigation = $this->business->get($path);
+        $fileList = $this->business->listFile($path);
+        $folderList = $this->business->listFolder($path);
+
         $body = $this->view->import('nav.navigate', [
-            'path' => $path,
-            'fileList' => $navigation->fileList,
-            'folderList' => $navigation->folderList,
-            'previousDirEncoded' => $navigation->previousDirEncoded,
+            // 'path' => $path,
+            'fileList' => $fileList,
+            'folderList' => $folderList,
+            'navigation' => $navigation,
         ]);
 
         $response = new ResponseSystem();

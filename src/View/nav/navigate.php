@@ -5,12 +5,29 @@
             <h2>Navegação</h2>
         </div>
     </div>
-    <?php if($previousDirEncoded !== null) : ?>
-    <div class="row">
-        <div class="col">
-            <div class="btn btn-outline-secondary" name="access" path="<?= $previousDirEncoded ?>">Voltar</div>
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <?php if(!empty($navigation->path)): ?>
+            <li class="breadcrumb-item active">
+                <div class="btn btn-outline-dark" name="access" path="">Início</div>
+            </li>
+            <?php endif; ?>
+            <?php foreach($navigation->breadcrumb as $breadcrumbItem) : ?>
+                <li class="breadcrumb-item">
+                    <div class="btn btn-outline-dark" name="access" path="<?= $breadcrumbItem->encodedPath ?>">
+                        <?= $breadcrumbItem->name ?>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+            <!-- <li class="breadcrumb-item active" aria-current="page">Library</li> -->
+        </ol>
+    </nav>
+    <?php if($navigation->previousDirEncoded !== null) : ?>
+        <div class="row">
+            <div class="col">
+                <div class="btn btn-outline-secondary" name="access" path="<?= $navigation->previousDirEncoded ?>">Voltar</div>
+            </div>
         </div>
-    </div>
     <?php endif; ?>
     <div class="row">
         <div class="col">

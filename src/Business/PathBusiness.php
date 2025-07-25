@@ -73,4 +73,8 @@ class PathBusiness
         }
         return realpath($path . DIRECTORY_SEPARATOR . '..');
     }
+
+    public function getSubpath(string $path): string{
+        return str_replace($this->envConfig->getPathList(), '', $path);
+    }
 }

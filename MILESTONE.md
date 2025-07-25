@@ -2,8 +2,8 @@
 - [X] Create folder count for folder response
 - [X] Get single file\folder
 - [X] File Preview
+- [X] Provide the data to another computers onthe LAN
+- [X] Implementing of breadcrumb navigation system
 - [ ] Download for files
 - [ ] Download for folders
 - [ ] Single downloadr interface that determines if folder or file downloader must be called with only the file path
-- [X] Provide the data to another computers onthe LAN
-- [ ] Modify the buttons to the 
