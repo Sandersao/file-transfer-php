@@ -39,11 +39,16 @@ class FolderBusiness
         $folder->subpath = $path->subpath;
         $folder->name = $path->name;
 
-        $folder->fileCount = 0;
+        $folder->itemCount = 0;
         if($path->path){
-            $arquivoList = array_diff(scandir($path->path), ['.', '..']);
-            $folder->fileCount = count($arquivoList);
+            $arquivoList = $this->pathBusiness->list($path->path);
+            $folder->itemCount = count($arquivoList);
         }
         return $folder;
+    }
+
+    public function getPreviousDir(string $path): string
+    {
+        return realpath($path . DIRECTORY_SEPARATOR . '..');
     }
 }

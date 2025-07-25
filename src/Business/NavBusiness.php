@@ -3,26 +3,33 @@
 namespace Sandersao\FileTransfer\Business;
 
 use Sandersao\FileTransfer\IO\Response\NavResponse;
-use Sandersao\FileTransfer\IO\Response\PathResponse;
 
 class NavBusiness
 {
     private FileBusiness $fileBusiness;
     private FolderBusiness $folderBusiness;
+    private PathBusiness $pathBusiness;
     public function __construct(
         FileBusiness $fileBusiness,
-        FolderBusiness $folderBusiness
+        FolderBusiness $folderBusiness,
+        PathBusiness $pathBusiness
     ) {
         $this->fileBusiness = $fileBusiness;
         $this->folderBusiness = $folderBusiness;
+        $this->pathBusiness = $pathBusiness;
     }
 
-    /** @return NavResponse */
-    public function list(string | null $path): NavResponse
+    public function navigate(string | null $path): NavResponse
     {
         $navResponse = new NavResponse();
         $navResponse->fileList = $this->fileBusiness->list($path);
         $navResponse->folderList = $this->folderBusiness->list($path);
+
+        $navResponse->previousDir = null;
+        if (!empty($path)) {
+            $navResponse->previousDir = $this->pathBusiness->getPreviousDir($path);
+            $navResponse->previousDirEncoded = urlencode($navResponse->previousDir);
+        }
         return $navResponse;
     }
 }

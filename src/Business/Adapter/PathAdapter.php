@@ -15,12 +15,10 @@ class PathAdapter
 
         $pathList = [];
         while (false !== ($entry = readdir($handle))) {
-            if ($entry !== ".") {
-                $pathList[] = $entry;
-            }
+            $pathList[] = $entry;
         }
         closedir($handle);
 
-        return $pathList;
+        return array_diff($pathList, ['.', '..']);
     }
 }

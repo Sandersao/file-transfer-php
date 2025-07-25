@@ -5,7 +5,6 @@ namespace Sandersao\FileTransfer\Business;
 use Sandersao\FileTransfer\Business\Adapter\PathAdapter;
 use Sandersao\FileTransfer\Config\EnvConfig;
 use Sandersao\FileTransfer\IO\Exception\InternalException;
-use Sandersao\FileTransfer\IO\Response\PathAction;
 use Sandersao\FileTransfer\IO\Response\PathResponse;
 
 class PathBusiness
@@ -52,10 +51,6 @@ class PathBusiness
         }
 
         $path->path = realpath($fullPath);
-        $shouldReturnRoot = $childPath == '..' && in_array($pathString, $this->envConfig->getPathList());
-        if ($shouldReturnRoot) {
-            $path->path = '';
-        }
 
         $name = explode(DIRECTORY_SEPARATOR, $path->path);
         $name = end($name);
@@ -70,5 +65,12 @@ class PathBusiness
         }
 
         return $path;
+    }
+
+    public function getPreviousDir(string $path){
+        if (in_array($path, $this->envConfig->getPathList())){
+            return '';
+        }
+        return realpath($path . DIRECTORY_SEPARATOR . '..');
     }
 }

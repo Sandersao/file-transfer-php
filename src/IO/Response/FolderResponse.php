@@ -8,5 +8,5 @@ class FolderResponse
     public string $encodedPath;
     public string $subpath;
     public string $name;
-    public int $fileCount;
+    public int $itemCount;
 }

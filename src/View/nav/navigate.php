@@ -7,6 +7,11 @@
     </div>
     <div class="row">
         <div class="col">
+            <div class="btn btn-outline-secondary" name="access" path="<?= $previousDirEncoded ?>">Voltar</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
             <h3>Pastas</h3>
         </div>
     </div>
@@ -29,7 +34,7 @@
                         </p>
 
                         <p class="card-text">
-                            Arquivos: <?= $folder->fileCount ?>
+                            Itens: <?= $folder->itemCount ?>
                         </p>
 
                         <?php if ($folder->subpath == '..') : ?>

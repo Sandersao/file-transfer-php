@@ -10,4 +10,6 @@ class NavResponse
 {
     public array $fileList;
     public array $folderList;
+    public string | null $previousDir;
+    public string | null $previousDirEncoded;
 }
