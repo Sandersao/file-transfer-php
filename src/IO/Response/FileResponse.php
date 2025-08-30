@@ -2,24 +2,71 @@
 
 namespace Sandersao\FileTransfer\IO\Response;
 
-class FilePreviewType {
-    public static $video = 'video';
-    public static $image = 'image';
-    public static $audio = 'audio';
-    public static $iframe = 'iframe';
-    public static $none = 'none';
-}
+class FilePreview {}
+class FilePreviewImage extends FilePreview {}
+class FilePreviewVideo extends FilePreview {}
+class FilePreviewAudio extends FilePreview {}
+class FilePreviewIframe extends FilePreview {}
+class FilePreviewNone extends FilePreview {}
 
-class FileResponse
+class FileResponse extends DirectoryResponse
 {
-    public string $path;
-    public string $encodedPath;
-    public string $subpath;
-    public string $name;
-    public string $ext;
-    public string $mimetype;
-    public int $byteSize;
-    public string $size;
-    public string $previewType;
-    public string | null $binaryes = null;
+    private array $imageExtList = ['png', 'jpg'];
+    private array $videoExtList = ['mp4'];
+    private array $audioExtList = ['ogg'];
+    private array $iframeExtList = ['pdf'];
+
+    public function getExtension(): string
+    {
+        $ext = explode(".", $this->getName());
+        $ext = end($ext);
+        return strtolower($ext);
+    }
+
+    public function getBinaryDataFull(): string
+    {
+        return file_get_contents($this->path);
+    }
+
+    public function getMimetype(): string
+    {
+        return mime_content_type($this->path);
+    }
+
+    public function getByteSize(): int
+    {
+        return filesize($this->path);
+    }
+
+    public function getSize(): string
+    {
+        $size = filesize($this->path);
+        $unityList = ['B', 'KB', 'MB', 'GB', 'TB'];
+        $i = 0;
+        while ($size >= 1024 && $i < count($unityList) - 1) {
+            $size /= 1024;
+            $i++;
+        }
+        $roudedSize = round($size, 2);
+        $unity = $unityList[$i];
+        return "$roudedSize $unity";
+    }
+
+    public function getPreviewType(): FilePreview
+    {
+        $previewType = new FilePreviewNone();
+        if (in_array($this->getExtension(), $this->imageExtList)) {
+            $previewType = new FilePreviewImage();
+        }
+        if (in_array($this->getExtension(), $this->audioExtList)) {
+            $previewType = new FilePreviewAudio();
+        }
+        if (in_array($this->getExtension(), $this->videoExtList)) {
+            $previewType = new FilePreviewVideo();
+        }
+        if (in_array($this->getExtension(), $this->iframeExtList)) {
+            $previewType = new FilePreviewIframe();
+        }
+        return $previewType;
+    }
 }

@@ -3,26 +3,26 @@
 namespace Sandersao\FileTransfer\System;
 
 use Exception;
-use Phroute\Phroute\Dispatcher as PhrouteDispatcher;
+use Phroute\Phroute\Dispatcher;
 use Phroute\Phroute\RouteCollector;
 
-class DispatcherSystem
+class DispatchSystem
 {
-    private ViewSystem $view;
-    public function __construct(ViewSystem $view)
-    {
-        $this->view = $view;
-    }
-
     public function dispatch(RouteCollector $routeCollection){
-        $phrouteDispatcher = new PhrouteDispatcher($routeCollection->getData());
+        $dispatcher = new Dispatcher($routeCollection->getData());
         try {
-            $responseSystem = $phrouteDispatcher->dispatch(
+            $responseSystem = $dispatcher->dispatch(
                 $_SERVER['REQUEST_METHOD'],
                 parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
             );
 
-            $responseSystem->provide();
+            if(gettype($responseSystem) === 'string'){
+                echo $responseSystem;
+            }
+
+            if (gettype($responseSystem) === 'array') {
+                echo json_encode($responseSystem, JSON_PRETTY_PRINT);
+            }
         } catch (Exception $e) {
             http_response_code(404);
             echo 'Página não encontrada.';

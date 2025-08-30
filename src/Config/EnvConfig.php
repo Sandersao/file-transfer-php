@@ -21,4 +21,10 @@ class EnvConfig
             return !empty($path);
         });
     }
+
+    /** @return int */
+    public function getDownloadBlockSize(): int
+    {
+        return intval( $_ENV['DEFAULT_DOWNLOAD_BLOCK_SIZE'] ?? '8192');
+    }
 }

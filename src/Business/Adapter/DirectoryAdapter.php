@@ -4,7 +4,7 @@ namespace Sandersao\FileTransfer\Business\Adapter;
 
 use Sandersao\FileTransfer\IO\Exception\InternalException;
 
-class PathAdapter
+class DirectoryAdapter
 {
     public function list(string $path)
     {

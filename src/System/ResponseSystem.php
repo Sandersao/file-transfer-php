@@ -4,42 +4,35 @@ namespace Sandersao\FileTransfer\System;
 
 class ResponseSystem
 {
-    public string | array | null $header = null;
-    public array | string $body;
-
-    public function provide(): void {
-        // ob_clean();
-        // flush();
-        if ($this->header !== null && gettype($this->header) == 'string') {
-            header($this->header);
-            echo $this->body;
+    public function provide(string | array | null $reponse): void
+    {
+        if (empty($reponse)) {
             return;
         }
 
-        if ($this->header !== null && gettype($this->header) == 'array') {
-            foreach ($this->header as $headerItem) {
-                header($headerItem);
-            }
-            echo $this->body;
-            return;
-        }
-        if (is_array($this->body)) {
-            $this->prepareHeaderJson();
-            echo json_encode($this->body);
-            return;
-        }
-
-        $this->prepararHeaderHtml();
-        echo $this->body;
+        $this->show($reponse);
     }
 
-    public function prepareHeaderJson()
-    {
-        header('Content-Type: application/json; charset=UTF-8');
+    public function show(string | array $reponse){
+        if(gettype($reponse) === 'array'){
+            header('Content-Type: application/json; charset=UTF-8');
+            echo json_encode($reponse, JSON_PRETTY_PRINT);
+            flush();
+            return;
+        }
+
+        if(gettype($reponse) === 'string'){
+            header('Content-Type: text/html; charset=UTF-8');
+            echo $reponse;
+            flush();
+            return;
+        }
+
+        echo '{"error": "No response detected!"}';
     }
 
-    public function prepararHeaderHtml()
-    {
-        header('Content-Type: text/html; charset=UTF-8');
+    public function redirect(string $uri){
+        echo "<script>window.location.href = '$uri';</script>";
+        die();
     }
 }

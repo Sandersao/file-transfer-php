@@ -7,5 +7,9 @@
 - [X] Solve the problems with the breadcrumbs
 - [X] Download for files
 - [ ] Download for folders
-  - [ ] Zip folders vefore download
+  - [ ] Control HTTP output
+  - [ ] Control chunck file retrival
+  - [ ] Zip folders before download
+- [ ] Zip file preview
+  - Read teh file and show the three
 - [Canceled] Single download interface that determines if folder or file downloader must be called with only the file path

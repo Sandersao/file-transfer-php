@@ -2,77 +2,37 @@
 
 namespace Sandersao\FileTransfer\Business;
 
+use Sandersao\FileTransfer\Config\EnvConfig;
 use Sandersao\FileTransfer\IO\Response\NavResponse;
-use Sandersao\FileTransfer\IO\Response\PathResponse;
 
 class NavBusiness
 {
     private FileBusiness $fileBusiness;
     private FolderBusiness $folderBusiness;
-    private PathBusiness $pathBusiness;
+    private EnvConfig $env;
+
     public function __construct(
         FileBusiness $fileBusiness,
         FolderBusiness $folderBusiness,
-        PathBusiness $pathBusiness
+        EnvConfig $env
     ) {
         $this->fileBusiness = $fileBusiness;
         $this->folderBusiness = $folderBusiness;
-        $this->pathBusiness = $pathBusiness;
+        $this->env = $env;
     }
 
     public function get(string | null $path): NavResponse
     {
-        $navResponse = new NavResponse();
+        $nav = new NavResponse($path);
 
-        $navResponse->path = $path;
+        $nav->setRootPathList($this->env->getPathList());
 
-        $navResponse->breadcrumb = $this->generateBreadcrumb($path);
+        $nav->folderList = $this->folderBusiness->list($path);
 
         if (!empty($path)) {
-            $navResponse->previousDir = $this->pathBusiness->getPreviousDir($path);
-            $navResponse->previousDirEncoded = urlencode($navResponse->previousDir) ?? '';
+            $nav->fileList = $this->fileBusiness->list($path);
         }
 
-        return $navResponse;
-    }
-
-    public function listFile(string | null $path): array
-    {
-        return $this->fileBusiness->list($path);
-    }
-
-    public function listFolder(string | null $path): array
-    {
-        return $this->folderBusiness->list($path);
-    }
-
-    /** @return array<int, FolderResponse> */
-    private function generateBreadcrumb(string | null $path): array
-    {
-        $pathList = [];
-        if (!empty($path)) {
-            $pathList = $this->pathBusiness->getSubpath($path);
-            $pathList = explode(DIRECTORY_SEPARATOR, $pathList);
-            $pathList = array_filter($pathList, function ($pathItem) {
-                return !empty($pathItem);
-            });
-            array_pop($pathList);
-            $pathList = array_values($pathList);
-        }
-
-        $pathList = array_map(function ($pathItem) use ($path) {
-            $posicao = strpos($path, $pathItem);
-
-            if ($posicao === false) {
-                return false;
-            }
-            return substr($path, 0, $posicao + strlen($pathItem));
-        }, $pathList);
-
-        $pathList = array_map(function ($path) {
-            return $this->folderBusiness->get($path);
-        }, $pathList);
-
-        return $pathList;
+        return $nav;
     }
 }

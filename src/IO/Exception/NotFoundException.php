@@ -2,11 +2,11 @@
 
 namespace Sandersao\FileTransfer\IO\Exception;
 
-class InternalException extends DefaultException
+class NotFoundException extends DefaultException
 {
     public function __construct(string $message)
     {
         $this->message = $message;
-        $this->code = 500;
+        $this->code = 404;
     }
 }

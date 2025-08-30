@@ -9,5 +9,6 @@ $container = new Container();
 
 /** @var BootstrapSystem $bootstrap */
 $bootstrap = $container->get(BootstrapSystem::class);
+$bootstrap->setContainer($container);
 
-$bootstrap->start();
+$bootstrap->route();
